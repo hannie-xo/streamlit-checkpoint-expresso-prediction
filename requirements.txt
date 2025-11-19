@@ -1,0 +1,7 @@
+You need to install the following packages.
+pandas
+scikit-learn
+streamlit
+category_encoders
+ydata_profiling
+joblib
