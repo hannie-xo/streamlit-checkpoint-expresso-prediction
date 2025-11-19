@@ -20,8 +20,8 @@ st.subheader("Categorical Features")
 cat_inputs = {}
 
 for col in categorical_cols:
-    options = categories_dict[col]  # real categories learned from training data
-    val = st.selectbox(col, options)  # dropdown instead of text input
+    options = categories_dict[col]  
+    val = st.selectbox(col, options)  
     cat_inputs[col] = val
 
 cat_df = pd.DataFrame([cat_inputs])
@@ -47,7 +47,7 @@ num_df = pd.DataFrame([numeric_inputs])
 # ------------------------------
 df_input = pd.concat([num_df, cat_encoded], axis=1)
 
-# Reorder columns exactly like training
+
 df_input = df_input[feature_cols]
 
 # ------------------------------
@@ -64,3 +64,4 @@ if st.button("Predict Churn"):
         st.error(f'Customer is likely to churn.\nProbability: {probability:.2%}')
     else:
         st.success(f'Customer is unlikely to churn.\nProbability: {probability:.2%}')
+
