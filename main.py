@@ -6,11 +6,11 @@ import joblib
 from ydata_profiling import ProfileReport
 
 # -----------------------------
-# 1️⃣ Load Dataset
+# Load Dataset
 # -----------------------------
 df = pd.read_csv('Expresso_churn_dataset.csv')
 
-# Optional: Explore dataset
+# Explore dataset
 print("--- DataFrame Head ---")
 print(df.head())
 print("\n--- General Info ---")
@@ -19,14 +19,14 @@ print("\n--- Descriptive Statistics ---")
 print(df.describe(include='all'))
 
 # -----------------------------
-# 2️⃣ Create Pandas Profiling Report (Optional)
+# Create Pandas Profiling Report 
 # -----------------------------
-profile = ProfileReport(df.sample(n=100000, random_state=42), title='Expresso Churn Sampled Report')
+profile = ProfileReport(df, title = 'Expresso Dataset Report')
 profile.to_file("expresso_report.html")
 print("Profiling report saved as expresso_report.html")
 
 # -----------------------------
-# 3️⃣ Preprocessing
+# Preprocessing
 # -----------------------------
 # Drop duplicates and unique ID
 df.drop_duplicates(inplace=True)
@@ -43,7 +43,7 @@ for col in categorical_cols:
     df[col] = df[col].fillna("Unknown")
 
 # -----------------------------
-# 4️⃣ Split Features & Target
+# Split Features & Target
 # -----------------------------
 X = df.drop("CHURN", axis=1)
 y = df["CHURN"]
@@ -53,14 +53,14 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 # -----------------------------
-# 5️⃣ Target Encoding for categorical columns
+# Target Encoding for categorical columns
 # -----------------------------
 target_enc = ce.TargetEncoder(cols=categorical_cols)
 X_train[categorical_cols] = target_enc.fit_transform(X_train[categorical_cols], y_train)
 X_test[categorical_cols] = target_enc.transform(X_test[categorical_cols])
 
 # -----------------------------
-# 6️⃣ Train RandomForest
+# Train RandomForest
 # -----------------------------
 model = RandomForestClassifier(n_estimators=200, max_depth=20, n_jobs=-1, random_state=42)
 model.fit(X_train, y_train)
@@ -69,10 +69,10 @@ print("Train Accuracy:", model.score(X_train, y_train))
 print("Test Accuracy:", model.score(X_test, y_test))
 
 # -----------------------------
-# 7️⃣ Save model + encoder + metadata for Streamlit
+# Save model + encoder for Streamlit
 # -----------------------------
 
-#  Save full feature order (needed for prediction alignment)
+
 feature_cols = X_train.columns.tolist()
 
 # Save unique categories for dropdowns in Streamlit
@@ -87,3 +87,4 @@ joblib.dump(
 )
 
 print("Model saved as model.pkl")
+
